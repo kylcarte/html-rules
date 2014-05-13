@@ -23,34 +23,33 @@ import Text.HTML.TagSoup.Tree
 
 
 -- | a single HTML Tree
-type Fragment    = TagTree String
+type Fragment = TagTree String
 -- | an HTML Forest
-type HTML    = [Fragment]
+type HTML     = [Fragment]
 -- | Tag name
 type Name     = String
 -- | Attribute name
-type AttrKey    = String
+type AttrKey  = String
 -- | Attribute value
-type AttrVal = String
-type Attrs   = [Attribute String]
+type AttrVal  = String
+type Attrs    = [Attribute String]
 -- | an HTML branch's descendents
-type Desc    = HTML
-
+type Desc     = HTML
 
 -- | a 'Query' to decide when to apply a transformation,
 --   paired with the 'Trans'formation.
 --
 --   NB: a Transformation makes
 --   a single 'Fragment' into zero or more 'Fragment's.
-type Rule  m a b = (Query a, Trans m a b)
+type Rule  m a b = (Query m a, Trans m a b)
 
 -- | a Rule over a 'Fragment' of HTML.
-type FragR m     = Rule m Fragment HTML
+type FragmentRule m     = Rule m Fragment HTML
 
 -- | a predicate on some type
-type Query a = a -> Bool
+type Query m a = a -> m Bool
 -- | a predicate on an HTML Fragment
-type FragQ   = Query Fragment
+type FragmentQuery m = Query m Fragment
 
 -- | a Transformation with a State of @a@
 type Trans  m a b = StateT a m b

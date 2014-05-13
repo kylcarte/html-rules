@@ -17,6 +17,7 @@ Stability   : experimental
 module Text.HTML.Rules.Query where
 
 import Text.HTML.Rules.Types
+import Text.HTML.Rules.Util
 
 import Control.Applicative hiding (optional)
 import Data.List
@@ -25,25 +26,26 @@ import Data.Maybe
 -- * Attribute-Specific Queries
 
 -- | match any of the given 'Name's.
-tags :: [Name] -> FragQ
+tags :: Applicative m => [Name] -> FragmentQuery m
 tags = or_ . map tag
+{-# INLINE tags #-}
 
 -- | match a 'Name'.
-tag :: Name -> FragQ
-tag t = \case
+tag :: Applicative m => Name -> FragmentQuery m
+tag t = pure . \case
   Branch tg _ _ -> t == tg
   Leaf   tg _   -> t == tg
   _             -> False
 
 -- | match a 'Text' node.
-isText :: FragQ
-isText = \case
+isText :: Applicative m => FragmentQuery m
+isText = pure . \case
   Text _ -> True
   _      -> False
 
 -- | match all nodes with a particular Attribute.
-hasAttr :: AttrKey -> FragQ
-hasAttr a = \case
+hasAttr :: Applicative m => AttrKey -> FragmentQuery m
+hasAttr a = pure . \case
   Branch _ (yes -> r) _ -> isJust r
   Leaf   _ (yes -> r)   -> isJust r
   _                     -> False
@@ -52,35 +54,35 @@ hasAttr a = \case
 
 -- * General Combinators
 
-true, false :: Query a
+true, false :: Applicative m => Query m a
 -- | always matches.
-true  = const True
+true  = pure2 True
 -- | always fails.
-false = const False
+false = pure2 False
 
 -- ** Lifted Operations
 
 -- | logical disjunction of 'Query's.
-(.||.) :: Query a -> Query a -> Query a
-(.||.) = liftA2 (||)
+(.||.) :: Applicative m => Query m a -> Query m a -> Query m a
+(.||.) = liftAA2 (||)
 infixr 2 .||.
 
 -- | logical disjunction of a list of 'Query's.
-or_ :: [Query a] -> Query a
+or_ :: Applicative m => [Query m a] -> Query m a
 or_ = foldr (.||.) false
 {-# INLINE or_ #-}
 
 -- | logical conjunction of 'Query's.
-(.&&.) :: Query a -> Query a -> Query a
-(.&&.) = liftA2 (&&)
+(.&&.) :: Applicative m => Query m a -> Query m a -> Query m a
+(.&&.) = liftAA2 (&&)
 infixr 3 .&&.
 
 -- | logical conjunction of a list of 'Query's.
-and_ :: [Query a] -> Query a
+and_ :: Applicative m => [Query m a] -> Query m a
 and_ = foldr (.&&.) true
 {-# INLINE and_ #-}
 
 -- | negate the result of a 'Query'.
-not_ :: Query a -> Query a
-not_ = liftA not
+not_ :: Applicative m => Query m a -> Query m a
+not_ = liftAA not
 

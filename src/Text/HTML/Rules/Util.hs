@@ -16,6 +16,7 @@ Stability   : experimental
 
 module Text.HTML.Rules.Util where
 
+import Control.Applicative
 import Control.Monad ((>=>))
 
 {-
@@ -61,4 +62,16 @@ one_ = (:[])
 -- | compse a list of sequent endo-functions into a single sequent.
 concatEndo :: Monad m => [a -> m a] -> a -> m a
 concatEndo = foldr (>=>) return
+
+liftAA :: (Applicative f, Applicative g) => (a -> b) -> f (g a) -> f (g b)
+liftAA = fmap . fmap
+
+pure2 :: (Applicative f, Applicative g) => a -> f (g a)
+pure2 = pure . pure
+
+ap2   :: (Applicative f, Applicative g) => f (g (a -> b)) -> f (g a) -> f (g b)
+ap2 f x = (<*>) <$> f <*> x
+
+liftAA2 :: (Applicative f, Applicative g) => (a -> b -> c) -> f (g a) -> f (g b) -> f (g c)
+liftAA2 f x y = pure2 f `ap2` x `ap2` y
 
