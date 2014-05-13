@@ -8,10 +8,16 @@ license-file:        LICENSE
 author:              Kyle Carter
 maintainer:          Kyle Carter <kcarter@galois.com>
 copyright:           (c) Kyle Carter 2014, All rights reserved
+homepage:            http://github.com/kylcarte/html-rules/
+bug-reports:         http://github.com/kylcarte/html-rules/issues
 category:            HTML, Web, Text, Transformation
 build-type:          Simple
 -- extra-source-files:  
 cabal-version:       >=1.10
+
+source-repository head
+  type: git
+  location: git://github.com/kylcarte/html-rules.git
 
 library
   exposed-modules:     Text.HTML.Rules
