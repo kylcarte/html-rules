@@ -1,6 +1,6 @@
 
 name:                html-rules
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            Perform traversals of HTML structures using sets of rules.
 description:         
 license:             BSD3
