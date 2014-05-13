@@ -6,8 +6,8 @@ description:
 license:             BSD3
 license-file:        LICENSE
 author:              Kyle Carter
-maintainer:          kcarter@galois.com
-copyright:           Copyright Kyle Carter 2014, All rights reserved
+maintainer:          Kyle Carter <kcarter@galois.com>
+copyright:           (c) Kyle Carter 2014, All rights reserved
 category:            HTML, Web, Text, Transformation
 build-type:          Simple
 -- extra-source-files:  
@@ -29,7 +29,6 @@ library
   -- other-extensions:    
   build-depends:       base >=2 && < 5,
                        lens >=4 && < 5,
-                       pandoc >=1 && < 1.13,
                        tagsoup >= 0.13,
                        transformers >=0.2 && <0.4,
                        mtl >=2 && <3
